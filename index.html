@@ -236,7 +236,7 @@ docZoom.addEventListener('click',()=>docSetZoom(!docScroll.classList.contains('z
  function record(name){
   if(!allowed.has(name)||sent.has(name))return;sent.add(name);
   // V21: neutral video-progress custom events for Meta optimization (no health or contact data).
-  try{const m={video_start:'VideoStart',video_50:'Video50'}[name];if(m&&typeof window.fbq==='function'&&window.fbq.loaded!==undefined)window.fbq('trackCustom',m);}catch(e){}
+  try{const m={video_start:['trackCustom','VideoStart'],video_50:['trackCustom','Video50'],lead:['track','Contact']}[name];if(m&&typeof window.fbq==='function'&&window.fbq.loaded!==undefined)window.fbq(m[0],m[1]);}catch(e){}
   if(location.protocol!=='https:'||!AGGREGATE_ENDPOINT)return;
   try{fetch(AGGREGATE_ENDPOINT,{method:'POST',mode:'no-cors',credentials:'omit',referrerPolicy:'no-referrer',keepalive:true,headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({event:name,...window.NEO_ATTRIBUTION,lang:(document.documentElement.lang||'').slice(0,5)})}).catch(()=>{});}catch(e){}
  }
